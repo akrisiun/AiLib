@@ -9,7 +9,7 @@ namespace Ai.Entity.DataTables
 {
     public static class SqlTableData
     {
-        public static bool Exec(this SqlTable tableObj, DbContext context,
+        public static bool Exec(this SqlObjTable tableObj, DbContext context,
                string[] param, int iFrom, int iTake)
         {
             string execName = param[0];

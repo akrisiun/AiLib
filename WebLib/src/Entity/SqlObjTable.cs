@@ -10,46 +10,13 @@ using System.Web;
 
 namespace Ai.Entity
 {
-
-    /* IQueryable : IEnumerable
-    {
-        Type ElementType { get; }
-        Expression Expression { get; }
-        IQueryProvider Provider { get; }
-    } */
-
-    public class Provider : IQueryProvider
-    {
-        // Provider { get; }
-
-        public IQueryable<TElement> CreateQuery<TElement>(Expression expression)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IQueryable CreateQuery(Expression expression)
-        {
-            throw new NotImplementedException();
-        }
-
-        public TResult Execute<TResult>(Expression expression)
-        {
-            throw new NotImplementedException();
-        }
-
-        public object Execute(Expression expression)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    public class SqlTable : IEnumerable<object[]>
+    public class SqlObjTable : IEnumerable<object[]>
     {
         #region ctor
         public SqlField[] Fields { get; set; }
 
         private IQueryable<object[]> querySource;
-        private SqlQueryParameters queryParam;
+        private SqlObjQueryParameters queryParam;
         // public abstract DbContext Reconnect { get; }
 
         public bool RowsAny
@@ -76,13 +43,13 @@ namespace Ai.Entity
             }
         }
 
-        // IList<object[]> Rows
+        // todo: IList<object[]> Rows
 
-        public SqlTable()
+        public SqlObjTable()
         {
             Fields = new SqlField[] { };
 
-            queryParam = SqlQueryParameters.WithParser(
+            queryParam = SqlObjQueryParameters.WithParser(
                 new SqlProc() { CmdText = String.Empty, Context = null }, null);
 
             querySource = Enumerable.Empty<object[]>().AsQueryable();
@@ -113,13 +80,14 @@ namespace Ai.Entity
 
         #endregion
 
-        #region IEnumerable
+        #region IEnumerator
 
         public virtual IEnumerator<object[]> GetEnumerator()
         {
-            // foreach (object[] rowItem in Rows)
-            //     yield return rowItem;
-            var query = this.Query;
+            if (!queryParam.IsPrepared())
+                yield break;
+
+            var query = this.queryParam.Query();
             foreach (object[] rowItem in query)
                 yield return rowItem;
         }
@@ -134,26 +102,11 @@ namespace Ai.Entity
         {
             get
             {
-                //if (queryParam.proc.Connection == null)
-                //{
-                //    var procFix = queryParam.proc;
-                //    procFix.Context = Reconnect;
-                //    queryParam.proc = procFix;
-                //    if (queryParam.proc.Context == null || !procFix.Context.AssureOpen())
-                //        return null;
-                //}
-
                 if (!queryParam.IsPrepared())
                     queryParam.Prepare(queryParam.proc);
 
                 var enumerable = queryParam.Query();
                 this.querySource = enumerable.AsQueryable<object[]>();
-                /*
-                    if (iTake > 0)
-                        query = query.Take(iTake);
-                    if (iFrom > 0)
-                        query = query.Skip(iFrom);
-                */
                 return this.querySource;
             }
         }
@@ -176,7 +129,7 @@ namespace Ai.Entity
 
         public bool ExecNamed(DbContext context, object paramNamed, int iFrom = 0, int iTake = 0)
         {
-            var prop = new Properties(paramNamed);
+            var prop = new NameProperties(paramNamed);
             string execName = prop.GetValue(paramNamed, prop.FirstName()) as string;
             var proc = SqlProcExt.CmdText(execName, context);
 
@@ -233,11 +186,11 @@ namespace Ai.Entity
         #endregion
     }
 
-    public class Properties
+    public class NameProperties
     {
-        public Properties(object paramNamed)
+        public NameProperties(object paramNamed)
         {
-            list = Reflection.ReflectionUtils.GetProperties(paramNamed);
+            list =  Reflection.Utils.GetProperties(paramNamed); // .GetPropertyValue  ReflectionUtils.GetProperties(paramNamed);
         }
 
         PropertyDescriptorCollection list;
@@ -261,7 +214,7 @@ namespace Ai.Entity
 
         public object GetValue(object paramObj, string propertyName)
         {
-            return Ai.Reflection.ReflectionUtils.GetPropertyValue(paramObj, propertyName);
+            return Reflection.Utils.GetPropertyValue(paramObj, propertyName);
         }
 
     }
@@ -318,14 +271,14 @@ namespace Ai.Entity
         }
     }
 
-    public struct SqlQueryParameters
+    public struct SqlObjQueryParameters
     {
         public SqlProc proc { get; private set; }
-        private SqlObjectExec mapper;
+        private SqlObjectReader mapper;
 
-        public static SqlQueryParameters WithParser(SqlProc proc, Action<SqlTableMapper, DbDataReader> propertiesParser = null)
+        public static SqlObjQueryParameters WithParser(SqlProc proc, Action<SqlTableMapper, DbDataReader> propertiesParser = null)
         {
-            return new SqlQueryParameters() { proc = proc, mapper = new SqlObjectExec(propertiesParser) };
+            return new SqlObjQueryParameters() { proc = proc, mapper = new SqlObjectReader(propertiesParser) };
         }
 
         public bool IsEmpty() { return string.IsNullOrWhiteSpace(proc.CmdText) || mapper == null; }
@@ -353,7 +306,7 @@ namespace Ai.Entity
 
     }
 
-    public class SqlObjectExec : SqlTableMapper, IDisposable
+    public class SqlObjectReader : SqlTableMapper, IDisposable
     {
         private SqlConnection conn;
         private SqlCommand cmd;
@@ -364,7 +317,7 @@ namespace Ai.Entity
         public SqlConnection Connection { get { return conn; } }
         public SqlDataReader DataReader { get { return dataReader; } }
 
-        public SqlObjectExec(Action<SqlTableMapper, DbDataReader> propertiesParser)
+        public SqlObjectReader(Action<SqlTableMapper, DbDataReader> propertiesParser)
             : base(propertiesParser)
         {
             conn = null;

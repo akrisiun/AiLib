@@ -14,15 +14,83 @@ namespace Ai.Reflection
     {
         public static object GetPropertyValue(this object obj, string property)
         {
-            
             object value = null;
-            bool success = ReflectionUtils.TryToGetPropertyValue(obj, property, out value);
+            bool success = TryToExtractValueFromDescriptor(obj, property, out value);
             return value;
         }
 
+        public static bool IsPropertyExist(object obj, string propertyName)
+        {
+            PropertyDescriptor desc = propertyCache.GetPropertyDescriptor(obj, propertyName);
+            return desc != null;
+        }
+
+        public static object GetPropertyValue(System.ComponentModel.PropertyDescriptorCollection properties, object obj, string property)
+        {
+            var value = properties.GetPropertyValue(property);
+            return value;
+        }
+
+        public static bool TryToGetPropertyValue(this object obj, string property, out object value)
+        {
+            return TryToExtractValueFromDescriptor(obj, property, out value);
+        }
+
+        #region Values Get, Property Cache
+
+        private static PropertyCache propertyCache;
+        static Utils() { propertyCache = new PropertyCache(); }
+
+        private class PropertyCache
+        {
+            public struct TypePropertyPair
+            {
+                public Type type;
+                public string propertyName;
+            }
+
+            static Dictionary<TypePropertyPair, PropertyDescriptor> cache = new Dictionary<TypePropertyPair, PropertyDescriptor>();
+
+            public PropertyDescriptor GetPropertyDescriptor(object source, string propertyName)
+            {
+                TypePropertyPair key = new TypePropertyPair() { type = source != null ? source.GetType() : null, propertyName = propertyName };
+                if (key.type == null || key.propertyName == null)
+                    return null;
+                if (cache.ContainsKey(key))
+                    return cache[key];
+                else
+                {
+                    PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(source);
+                    PropertyDescriptor descriptor = properties == null ? null : properties.Find(propertyName, ignoreCase: true);
+                    if (descriptor == null) return null;
+
+                    lock (cache)
+                    {
+                        if (!cache.ContainsKey(key))
+                            cache.Add(key, descriptor);
+                    }
+                    return descriptor;
+                }
+            }
+        }
+
+        private static bool TryToExtractValueFromDescriptor(object source, string propertyName, out object value)
+        {
+            var descriptor = propertyCache.GetPropertyDescriptor(source, propertyName);
+            if (descriptor != null)
+            {
+                value = descriptor.GetValue(source);
+                return true;
+            }
+
+            value = null;
+            return false;
+        }
+       
+        #endregion
+
         public static void SetPropertyValue(this object obj, string propertyName, object propertyValue)
         {
-            // propertyValue = HttpUtility.HtmlDecode(propertyValue);
             PropertyInfo propertyInfo = GetProperty(obj, propertyName);
             if (propertyInfo == null)
                 throw new ArgumentException(string.Format(
@@ -53,12 +121,11 @@ namespace Ai.Reflection
 
             propertyInfo.SetValue(obj, value, null);
         }
-       
 
         private static object TryGetPropertyValue(object obj, string propertyName, out bool success)
         {
             object value = null;
-            success = ReflectionUtils.TryToGetPropertyValue(obj, propertyName, out value);
+            success = TryToExtractValueFromDescriptor(obj, propertyName, out value);
             return value;
         }
 
@@ -71,7 +138,7 @@ namespace Ai.Reflection
                 {
                     try
                     {
-                        var converter = Activator.CreateInstance(Type.GetType(attr.ConverterTypeName)) 
+                        var converter = Activator.CreateInstance(Type.GetType(attr.ConverterTypeName))
                                         as TypeConverter;
                         return converter;
                     }
@@ -81,17 +148,16 @@ namespace Ai.Reflection
             return null;
         }
 
-        #region DX Property methods
-
-        /* private static object GetCompositePropertyValue(object obj, string propertyName)
+        public static PropertyDescriptorCollection GetProperties(object obj)
         {
-            List<string> propertyNames = new List<string>(propertyName.Split(PropertyPathSeparator));
-            propertyNames.Remove(string.Empty);
-            object result = obj;
-            foreach (string propName in propertyNames)
-                result = GetPropertyValue(result, propName);
-            return result;
-        }  */
+            // PropertyInfo[]
+            // PropertyDescriptorCollection(PropertyDescriptor[] properties);
+            // var infoArray = obj.GetType().GetProperties();
+
+            return TypeDescriptor.GetProperties(obj.GetType());
+        }
+
+        #region Property methods
 
         private static PropertyInfo GetProperty(object obj, string propertyName)
         {
@@ -103,32 +169,7 @@ namespace Ai.Reflection
             }
             return null;
         }
-          
-        private static bool IsUrlProperty(PropertyInfo propertyInfo)
-        {
-            object[] attributes = propertyInfo.GetCustomAttributes(typeof(System.Web.UI.UrlPropertyAttribute), false);
-            return attributes.Length > 0;
-        }
 
-        /*
-        private static object PrepareUrlPropertyValue(object value, string themeName)
-        {
-            return UrlPathHelper.PrepareUrlPath(value.ToString(), themeName);
-        }
-        private static void SetCompositePropertyValue(object obj, string propertyName, string propertyValue)
-        {
-            string[] simpleProperties = propertyName.Split(PropertyPathSeparator);
-            object targetObject = obj;
-            for (int i = 0; i < simpleProperties.Length; i++)
-            {
-                string currentPropertyName = simpleProperties[i];
-                if (i == simpleProperties.Length - 1)
-                    SetPropertyValue(targetObject, currentPropertyName, propertyValue);
-                else
-                    targetObject = GetPropertyValue(targetObject, currentPropertyName);
-            }
-        } */
-        
         #endregion
     }
 }
