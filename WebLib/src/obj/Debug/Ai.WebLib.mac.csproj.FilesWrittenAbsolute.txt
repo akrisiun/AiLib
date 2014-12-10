@@ -1,0 +1,5 @@
+/Users/andriusk/Beta/AiLib/WebLib/src/obj/Debug/.NETFramework,Version=v4.5.AssemblyAttribute.cs
+/Users/andriusk/Beta/AiLib/WebLib/lib/Ai.WebLib.dll.mdb
+/Users/andriusk/Beta/AiLib/WebLib/lib/Ai.WebLib.dll
+/Users/andriusk/Beta/AiLib/WebLib/src/obj/Debug/Ai.WebLib.dll
+/Users/andriusk/Beta/AiLib/WebLib/src/obj/Debug/Ai.WebLib.dll.mdb

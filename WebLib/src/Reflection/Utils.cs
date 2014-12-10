@@ -15,7 +15,8 @@ namespace Ai.Reflection
         public static object GetPropertyValue(this object obj, string property)
         {
             object value = null;
-            bool success = TryToExtractValueFromDescriptor(obj, property, out value);
+            // bool success = 
+			TryToExtractValueFromDescriptor(obj, property, out value);
             return value;
         }
 
