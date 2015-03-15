@@ -1,4 +1,4 @@
-﻿using Sanitex.Entity;
+﻿using Ai.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +6,7 @@ using System.Globalization;
 using System.IO;
 using System.Xml.Linq;
 
-namespace Sanitex.Report
+namespace Ai.Report
 {
     public static class ExcelReport
     {
@@ -18,7 +18,7 @@ namespace Sanitex.Report
 
 }
 
-namespace Sanitex.Report.NPoi
+namespace Ai.Report.NPoi
 {
     using NPOI;
     using HSSF = NPOI.HSSF;

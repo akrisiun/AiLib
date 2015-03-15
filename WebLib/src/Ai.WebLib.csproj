@@ -41,7 +41,6 @@
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Data.Linq" />
     <Reference Include="System.Web" />
     <Reference Include="System.XML" />
     <Reference Include="System.Xml.Linq" />
@@ -56,7 +55,6 @@
     <Compile Include="Entity\DataTables\SqlTableData.cs" />
     <Compile Include="Entity\DbContext.cs" />
     <Compile Include="Entity\DbGetHelper.cs" />
-    <Compile Include="Entity\DbSet.cs" />
     <Compile Include="Entity\EnumValue.cs" />
     <Compile Include="Entity\DbDataMapHelper.cs" />
     <Compile Include="Entity\SqlField.cs" />
@@ -64,18 +62,10 @@
     <Compile Include="Entity\SqlObjTable.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="Reflection\Utils.cs" />
-    <Compile Include="Report\ExcelReport_NPoi.cs" />
-    <Compile Include="Report\ExcelResponse.cs" />
     <Compile Include="WestWind\Support\DynamicQuery.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ext\npoi\main\Ai.Npoi.nozip.csproj">
-      <Project>{10fa8538-157a-4380-a4f6-8e2c3ee92cae}</Project>
-      <Name>Ai.Npoi.nozip</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Entity\Linq\" />
+    <Folder Include="Report\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- 

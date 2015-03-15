@@ -1,3 +1,7 @@
 .arch/
 *.suo
 lib/
+*.mac.userprefs
+obj/
+*.config
+*.csproj.user

@@ -1,0 +1,32 @@
+﻿<UserControl x:Class="WpfExec.Entity.GridResult"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="400" d:DesignWidth="700">
+    <UserControl.Resources>
+            <SolidColorBrush x:Key="SilverLine" Color="#F0F0F0" />
+    </UserControl.Resources>
+    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <TabControl x:Name="tab1" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch"
+                    Margin="0,0,0,0">
+            <TabItem x:Name="Page1" Header="DataGrid">
+                <DataGrid Name="grd1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                    VerticalGridLinesBrush="{StaticResource SilverLine}"
+                    HorizontalGridLinesBrush="{StaticResource SilverLine}" 
+                    SelectionMode="Extended" SelectionUnit="CellOrRowHeader" 
+                    />
+            </TabItem>
+            <TabItem x:Name="Page2" Header="Web">
+                <WebBrowser Name="web1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+            </TabItem>
+            <TabItem x:Name="Page3" Header="c# obj">
+                <WebBrowser Name="webCS" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+            </TabItem>
+            <TabItem x:Name="Page4" Header="TSql obj">
+                <WebBrowser Name="webTSql" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+            </TabItem>
+        </TabControl>
+    </Grid>
+</UserControl>

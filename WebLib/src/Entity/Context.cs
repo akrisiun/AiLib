@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Configuration;
 using System.Data;
-using System.Data.Linq;
+// using System.Data.Linq;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
@@ -15,107 +16,75 @@ using System.Xml.XPath;
 
 namespace Ai.Entity
 {
-    public enum Server
+
+    public class DataContext
     {
-        [EnumValue(@".\SQLEXPRESS")]
-        Local = 0,
-        [EnumValue(@"SNTXTX-VM0\SNTXSQL1")]
-        VM0 = 1,
-        [EnumValue(@"SNTXTX-VM0\SNTXSQL1")]
-        VM0_ccUsrWeb = 2,
-        [EnumValue(@"BLSTX-SQL1.bls.lt")]
-        Bls = 3
-    }
+        public DataContext(IDbConnection connection)
+        {
+            Connection = connection;
+        }
+        public int CommandTimeout { get; set; }
+        public IDbConnection Connection { get; set; }
+    }    
 
     // System.Data.Linq.DataContext
     public class Context : DataContext
     {
         #region Default Connection, Static Open
-        public const Server DefaultServerEnum = Server.Local;
         public const string DefaultServer = @".\SQLEXPRESS"; // EnumValue.Get(Server.Local);
-        public const bool DefaultIntegratedSecurity = false;
-        public const string DefaultUser = "ccusrweb";
-        public const string DefaultPass = "ccwebusr";
-        public const string InitialCatalog = "SNTXDB";
-        public const int defConnectTimeout = 5;
-        public const int defCommandTimeout = 10;
-
-        public static Context Open(Server serverEnum)
+  
+        public static Context OpenWithConnStr(string fileOrServerOrConnection)
         {
-            return Open(serverEnum, InitialCatalog, true);
-        }
-
-        public static Context Open(Server serverEnum, string database, bool openConnection)
-        {
-            Instance = Context.Instance ?? new Context();
-            Instance.OpenConnection(serverEnum, database, openConnection);
+            if (Instance != null && Instance.Connection == null)
+                Instance = null;
+            Instance = Context.Instance ?? new Context(fileOrServerOrConnection);
+            Instance.AssureOpen();
+            if (Instance.dbName == null && Instance.Connection != null)
+                Instance.dbName = Instance.Connection.Database;
             return Instance;
         }
 
-        public bool OpenConnection(Server serverEnum, string database, bool openConnection)
-        {
-            string serverName = EnumValue.Get(serverEnum);
-            var conn = this.Connection;
-            if (serverEnum == Server.VM0_ccUsrWeb)
-                conn.ConnectionString = new SqlConnectionStringBuilder()
-                {
-                    DataSource = EnumValue.Get(serverEnum),
-                    InitialCatalog = database,
-                    UserID = "ccusrweb",
-                    Password = "ccwebusr",
-                    IntegratedSecurity = DefaultIntegratedSecurity,
-                    ConnectTimeout = defConnectTimeout
-                }.ConnectionString
-                 + ";Trusted_Connection=false;";
-            else
-                if (conn.State != ConnectionState.Open && string.IsNullOrEmpty(conn.ConnectionString))
-                    conn.ConnectionString = ConnectionString(serverEnum, database);
+        public static string UserID;
+        public static string Password;
+        public static bool? IntegratedSecurity;
+        #endregion
 
-            if (!conn.DataSource.Equals(serverName))
-                throw new System.OperationCanceledException("connection server error");
-            if (!conn.Database.Equals(database))
-                throw new System.OperationCanceledException("connection database server error");
+        #region Static 
+        public static Context Instance;
+        public static Context Empty { get; protected set; }
 
-            if (openConnection && conn.State != ConnectionState.Open)
-            {
-                if (this.OnBeforeOpen != null)
-                    this.OnBeforeOpen(this, new SqlConnEventArgs(conn as SqlConnection));
-                conn.Open();
-            }
-            dbName = database;
-            conn.ChangeDatabase(DbName);
-
-            this.CommandTimeout = defCommandTimeout;
-            return Connection.State == ConnectionState.Open;
-        }
-
-        public virtual string ConnectionString()
-        {
-            return Context.ConnectionString(Context.DefaultServerEnum, Context.InitialCatalog);
-        }
-
-        public static string ConnectionString(Server serverEnum, string database)
-        {
-            string serverName = EnumValue.Get(serverEnum);
-            Instance.dbName = database;
-            return new SqlConnectionStringBuilder()
-                    {
-                        DataSource = serverName,
-                        InitialCatalog = Instance.dbName,
-                        PersistSecurityInfo = true,
-                        IntegratedSecurity = DefaultIntegratedSecurity,
-                        UserID = DefaultUser,
-                        Password = DefaultPass,
-                        ConnectTimeout = defConnectTimeout
-                    }.ConnectionString
-                    + ";Trusted_Connection=false;";
+        static Context()
+        { 
+           UserID = null;
+           Password = null;
+           IntegratedSecurity = null;
+           Empty = new Context(conn: null);
         }
         #endregion
 
-        public static Context Instance;
-        public Context()
-            : base(new SqlConnection())
-        { }
+        public Context(string fileOrServerOrConnection)
+            : base(null)
+        {
+            // #if !DATALINQ
+            if (fileOrServerOrConnection != null && fileOrServerOrConnection.StartsWith("name="))
+            {
+                var name = fileOrServerOrConnection.Substring("name=".Length);
+                var connStr = ConfigurationManager.ConnectionStrings[name].ConnectionString;
+                base.Connection = new SqlConnection(connStr);
+            }
+            else
+                base.Connection = new SqlConnection();
+
+            dbName = base.Connection == null ? null : base.Connection.Database;
+        }
+
+        public Context(IDbConnection conn)
+            : base(conn)
+        {
+            dbName = base.Connection == null ? null : base.Connection.Database;
+            if (Instance == null)
+                Instance = this;
+        }
 
         #region Connection methods
         public EventHandler<SqlConnEventArgs> OnBeforeOpen { get; set; }
@@ -148,6 +117,7 @@ namespace Ai.Entity
         }
 
         public virtual SqlConnection SqlConnection { get { return base.Connection as SqlConnection; } }
+        public virtual string ConnectionString() { return base.Connection == null ? null : base.Connection.ConnectionString; }
         #endregion
 
         #region Sql Execute methods
@@ -168,11 +138,11 @@ namespace Ai.Entity
             return procedure.Exec<T>(list, null); // .Result;
         }
 
-        public T ExecScalar<T>(string sql)
+        public T ExecuteScalar<T>(string sql)
         {
             SqlCommand cmd = new SqlCommand() { Connection = this.SqlConnection, CommandText = sql };
 
-            Trace.WriteLine("ExecScalar: " + cmd.CommandText + " as " + typeof(T).Name);
+            Trace.WriteLine("ExecuteScalar: " + cmd.CommandText + " as " + typeof(T).Name);
             AssureOpen();
             return (T)cmd.ExecuteScalar();
         }

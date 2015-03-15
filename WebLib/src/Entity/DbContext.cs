@@ -10,13 +10,13 @@ namespace Ai.Entity
     // Simple database context
     public class DbContext : Context
     {
-        public DbContext(string connKey, string database)
+        public DbContext(string connKey, string database) : base(connKey)
         {
             if (connKey.StartsWith("name="))
             {
                 string name = connKey.Replace("name=", "");
                 this.connectionString = 
-                    ConfigurationManager.ConnectionStrings[name].ConnectionString;
+                     ConfigurationManager.ConnectionStrings[name].ConnectionString;
             }
             db = database;
         }

@@ -1,0 +1,59 @@
+﻿<Window x:Class="WpfExec.ExecWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:entity="clr-namespace:WpfExec.Entity"
+        xmlns:wpfEntity="clr-namespace:Ai.Wpf.Entity;assembly=Ai.Lib"
+        Title="WpfExec Sql utility"
+        Height="350" Width="925" MinWidth="200" MinHeight="40"
+    >
+    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="42"></RowDefinition>
+            <!--Splitter-->
+            <RowDefinition Height="4"></RowDefinition>  
+            <!--Result-->
+            <RowDefinition Height="160*"></RowDefinition>
+            <!--<RowDefinition Height="26"></RowDefinition>-->
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" VerticalAlignment="Stretch">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="110" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="200" />
+            </Grid.ColumnDefinitions>
+            <StackPanel Orientation="Horizontal" Grid.Row="0" VerticalAlignment="Stretch">
+                <Button x:Name="cmdPaste" 
+                        Margin="2" Padding="5,2,5,0" 
+                        VerticalAlignment="Top" Height="25" 
+                        HorizontalAlignment="Center">
+                    Paste
+                </Button>
+                <Button x:Name="cmdExec"
+                        Margin="2" Padding="5,2,10,0" 
+                        VerticalAlignment="Top" Height="25" 
+                        HorizontalAlignment="Center">
+                    Exec (F5)
+                </Button>
+                <!--<entity:ToolLine>
+                </entity:ToolLine>-->
+            </StackPanel>
+            <TextBox x:Name="textCmd" Margin="5,2,0,0" MinWidth="220"  HorizontalAlignment="Stretch"
+                     Grid.Column="1"
+                     HorizontalScrollBarVisibility="Auto" 
+                     FontFamily="Courier New" FontSize="14px" TextWrapping="WrapWithOverflow" AcceptsReturn="True">
+                Command...
+            </TextBox>
+            <ComboBox x:Name="cboServers" Margin="5,2,5,2" 
+                      HorizontalAlignment="Stretch"
+                      VerticalAlignment="Top" Height="25" 
+                      Grid.Column="2"
+                      >
+                local SNTXECOM
+            </ComboBox>
+        </Grid>
+        <GridSplitter ResizeDirection="Rows" Grid.Row="1" Background="Silver" HorizontalAlignment="Stretch" ShowsPreview="True" />
+        
+        <entity:GridResult x:Name="result" Margin="5" Grid.Row="2" />
+        <!--<wpfEntity:ToolLine Grid.Row="2" />-->
+    </Grid>
+</Window>

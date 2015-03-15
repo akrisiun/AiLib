@@ -1,0 +1,36 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:entity="clr-namespace:Ai.Wpf"
+                    x:Class="WindowTitle"
+  >
+  <DockPanel x:Key="windowTitle" >
+    <Grid DockPanel.Dock="Right"
+         HorizontalAlignment="Right">
+
+
+      <StackPanel Orientation="Horizontal"
+              HorizontalAlignment="Right"
+              VerticalAlignment="Center">
+
+        <Button x:Name="MinimizeButton"
+            KeyboardNavigation.IsTabStop="False"
+            />
+            <!-- Click="MinimizeClick" Style="{StaticResource MinimizeButton}"
+            Template="{StaticResource MinimizeButtonControlTemplate}" />-->
+
+        <Button x:Name="MaximizeButton"
+            KeyboardNavigation.IsTabStop="False"
+             />
+            <!-- Click="MaximizeClick" Style="{DynamicResource MaximizeButton}"
+            Template="{DynamicResource MaximizeButtonControlTemplate}" />-->
+
+        <Button x:Name="CloseButton"
+            KeyboardNavigation.IsTabStop="False"
+            Command="{Binding ApplicationCommands.Close}" />
+            <!--Style="{DynamicResource CloseButton}"
+            Template="{DynamicResource CloseButtonControlTemplate}"/>-->
+
+      </StackPanel>
+    </Grid>
+  </DockPanel>
+</ResourceDictionary>
