@@ -1,0 +1,35 @@
+<Page
+    x:Class="HelloWorld.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:HelloWorld"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50*"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="50*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBox x:Name="HelloMessage" Text="Hello, World!" Margin="10" IsReadOnly="True"/>
+            <Button x:Name="ClickMe" Content="Click Me!"  Margin="10" HorizontalAlignment="Center" Click="ClickMe_Click"/>
+            <Button x:Name="Showdown" Margin="20 0 0 0" Content="Shutdown" />
+
+        </StackPanel>
+
+        <TextBlock Padding="10 0 0 0" Grid.Row="1">Environment:</TextBlock>
+
+        <ListView x:Name="list" x:FieldModifier="public"
+                  Grid.Row="2"
+                  Header="Header 1" Margin="10"
+                  BorderBrush="Blue" BorderThickness="1">
+            <ListBoxItem>Line 0</ListBoxItem>
+            <ListBoxItem Height="20" Foreground="White" Content="Line1" />
+        </ListView>
+
+    </Grid>
+</Page>
