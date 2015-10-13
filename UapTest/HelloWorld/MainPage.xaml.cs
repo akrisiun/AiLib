@@ -14,8 +14,12 @@ namespace HelloWorld
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        public static MainPage Instance { get; set; }
+
+
         public MainPage()
         {
+            Instance = this;
             InitializeComponent();
 
             list.Items.Add(
@@ -28,10 +32,9 @@ namespace HelloWorld
                 list.Items.Add(
                     new ListBoxItem { Content = num.Key + " = " + num.Value }
                     );
-            // + Environment.NewLine;
 
             this.Showdown.Click += (s, e)
-                =>
+            =>
             {
                 Application.Current.Exit();
             };
@@ -40,7 +43,7 @@ namespace HelloWorld
 
         private void ClickMe_Click(object sender, RoutedEventArgs e)
         {
-            HelloMessage.Text = "Hello, Windows 10 IoT Core!";
+            HelloMessage.Text = "Hello, Windows 10 UAP!";
         }
     }
 }

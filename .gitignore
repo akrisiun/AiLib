@@ -5,3 +5,5 @@ lib/
 obj/
 *.config
 *.csproj.user
+*.opensdf
+*.sdf

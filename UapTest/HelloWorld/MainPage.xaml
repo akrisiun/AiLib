@@ -21,15 +21,19 @@
 
         </StackPanel>
 
-        <TextBlock Padding="10 0 0 0" Grid.Row="1">Environment:</TextBlock>
+        <RelativePanel Grid.Row="1" Grid.RowSpan="2" HorizontalAlignment="Stretch"
+                       >
+            <TextBlock Padding="10 0 0 0" Grid.Row="0">Environment:</TextBlock>
 
-        <ListView x:Name="list" x:FieldModifier="public"
-                  Grid.Row="2"
-                  Header="Header 1" Margin="10"
+            <ListView x:Name="list" x:FieldModifier="public"
+                  HorizontalAlignment="Stretch" 
+                  MinWidth="400" MinHeight="300"
+                  Header="Header 1" Margin="10 30 0 0"
                   BorderBrush="Blue" BorderThickness="1">
-            <ListBoxItem>Line 0</ListBoxItem>
-            <ListBoxItem Height="20" Foreground="White" Content="Line1" />
-        </ListView>
+                <ListBoxItem>Line 0</ListBoxItem>
+                <ListBoxItem Height="20" Foreground="White" Content="Line1" />
+            </ListView>
+        </RelativePanel>
 
     </Grid>
 </Page>
