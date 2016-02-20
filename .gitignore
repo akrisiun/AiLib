@@ -1,8 +1,10 @@
 .arch/
-*.suo
 lib/
-*.mac.userprefs
 obj/
+websrc/
+*.zip
+*.mac.userprefs
+*.suo
 *.config
 *.csproj.user
 *.opensdf
