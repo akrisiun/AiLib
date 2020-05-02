@@ -1,20 +1,20 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
+    <TargetFrameworks>net461</TargetFrameworks>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <Version>1.0.0</Version>
+    <PackageVersion>1.0.0-beta2</PackageVersion>
+
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{932BFFA3-28BA-4E71-87E8-32D91C92CE9F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Ai</RootNamespace>
     <AssemblyName>Ai.Lib</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>false</RestorePackages>
+    <StartupObject />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -22,138 +22,36 @@
     <Optimize>false</Optimize>
     <OutputPath>..\..\lib\</OutputPath>
     <DefineConstants>TRACE;DEBUG;PC;WPF;NET45;</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="Microsoft.mshtml, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-      <HintPath>..\..\lib\Microsoft.mshtml.dll</HintPath>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </Reference>
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Net" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
-    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Linq" />
-    <Reference Include="System.Threading.Tasks">
-    </Reference>
-    <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>False</Private>
-    </Reference>
+    <Reference Include="System.Threading.Tasks" />
     <Reference Include="System.Xaml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="WindowsBase" />
+
+    <!--<Reference Include="System.configuration" />-->
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="[4.5.0,)" />
+
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Dialog\SqlConfig.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="EntityDb\DbContext.cs" />
-    <Compile Include="EntityDb\DbSet.cs" />
-    <Compile Include="EntityDb\SqlXLinq.cs" />
-    <Compile Include="Entity\Context.cs" />
-    <Compile Include="Entity\ContextMulti.cs" />
-    <Compile Include="Entity\ContextMultiXml.cs" />
-    <Compile Include="Entity\DataArray.cs" />
-    <Compile Include="Entity\DataTables\DataRowExtensions.cs" />
-    <Compile Include="Entity\DbMap\DbDataMapHelper.cs" />
-    <Compile Include="Entity\DbMap\DbEnumeratorData.cs" />
-    <Compile Include="Entity\DbMap\DbGetHelper.cs" />
-    <Compile Include="Entity\DbMap\SqlMultiExt.cs" />
-    <Compile Include="Entity\DbMap\SqlObjTableReader.cs" />
-    <Compile Include="Entity\DbMap\SqlTableMapper.cs" />
-    <Compile Include="Entity\EnumValue.cs" />
-    <Compile Include="Entity\Expando\ContextMultiDyn.cs" />
-    <Compile Include="Entity\Expando\DataReaderMap.cs" />
-    <Compile Include="Entity\Expando\DbMapperDyn.cs" />
-    <Compile Include="Entity\Expando\ExpandoUtils.cs" />
-    <Compile Include="Entity\Expando\MultiDyn.cs" />
-    <Compile Include="Entity\DbMap\IDataMapHelper.cs" />
-    <Compile Include="Entity\DbMap\SqlField.cs" />
-    <Compile Include="Entity\Expando\SqlMultiDyn.cs" />
-    <Compile Include="Entity\SqlAttributes.cs" />
-    <Compile Include="Entity\SqlObjTable.cs" />
-    <Compile Include="Entity\SqlProc.cs" />
-    <Compile Include="Entity\SqlText.cs" />
-    <Compile Include="Entity\XElem\ContextXElem.cs" />
-    <Compile Include="Entity\XElem\DbMapperXElem.cs" />
-    <Compile Include="Excel\NPoiExcel.cs" />
-    <Compile Include="Dialog\DialogForms.cs" />
-    <Compile Include="Guard.cs" />
-    <Compile Include="Log.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Reflection\ReflectionCache.cs" />
-    <Compile Include="Reflection\Utils.cs" />
-    <Compile Include="Report\IExcelBase.cs" />
-    <Compile Include="Report\IExcelSettings.cs" />
-    <Compile Include="XHtml\Enumerable.cs" />
-    <Compile Include="XHtml\HtmlAgilityPack\crc32.cs" />
-    <Compile Include="XHtml\HtmlAgilityPack\EncodingFoundException.cs" />
-    <Compile Include="XHtml\HtmlAgilityPack\HtmlAttribute.cs" />
-    <Compile Include="XHtml\HtmlAgilityPack\HtmlAttributeCollection.cs" />
-    <Compile Include="XHtml\HtmlAgilityPack\HtmlCommentNode.cs" />
-    <Compile Include="XHtml\HtmlAgilityPack\HtmlDocument.cs" />
-    <Compile Include="XHtml\HtmlAgilityPack\HtmlDocument.PathMethods.cs" />
-    <Compile Include="XHtml\HtmlAgilityPack\HtmlDocument.Xpath.cs" />
-    <Compile Include="XHtml\HtmlAgilityPack\HtmlElementFlag.cs" />
-    <Compile Include="XHtml\HtmlAgilityPack\HtmlEntity.cs" />
-    <Compile Include="XHtml\HtmlAgilityPack\HtmlNameTable.cs" />
-    <Compile Include="XHtml\HtmlAgilityPack\HtmlNode.cs" />
-    <Compile Include="XHtml\HtmlAgilityPack\HtmlNode.Xpath.cs" />
-    <Compile Include="XHtml\HtmlAgilityPack\HtmlNodeCollection.cs" />
-    <Compile Include="XHtml\HtmlAgilityPack\HtmlNodeNavigator.cs" />
-    <Compile Include="XHtml\HtmlAgilityPack\HtmlNodeType.cs" />
-    <Compile Include="XHtml\HtmlAgilityPack\HtmlParseError.cs" />
-    <Compile Include="XHtml\HtmlAgilityPack\HtmlParseErrorCode.cs" />
-    <Compile Include="XHtml\HtmlAgilityPack\HtmlTextNode.cs" />
-    <Compile Include="XHtml\HtmlAgilityPack\NameValuePair.cs" />
-    <Compile Include="XHtml\HtmlAgilityPack\NameValuePairList.cs" />
-    <Compile Include="XHtml\HtmlAgilityPack\Trace.cs" />
-    <Compile Include="XHtml\HtmlAgilityPack\Trace.FullFramework.cs" />
-    <Compile Include="XHtml\HtmlAgilityPack\Utilities.cs" />
-    <Compile Include="XHtml\HtmlAgilityPack\XHtmlEntity.cs" />
-    <Compile Include="XHtml\HtmlRoot.cs" />
-    <Compile Include="XHtml\SplitPos.cs" />
-    <Compile Include="XHtml\StringExt.cs" />
-    <Compile Include="XHtml\TagsList.cs" />
-    <Compile Include="XHtml\XAttributeStyle.cs" />
-    <Compile Include="XHtml\XmlRoot.cs" />
-    <Compile Include="Util\ActiveDirectory.cs" />
-    <Compile Include="Util\ClipboardWin32.cs" />
-    <Compile Include="Util\EnumUtil.cs" />
-    <Compile Include="Util\SqlDataRowInfo.cs" />
-    <Compile Include="Util\Util.cs" />
-    <Compile Include="Trans.cs" />
-    <Compile Include="Wpf\Controls\CloneFactory.cs" />
-    <Compile Include="Wpf\Controls\GridDataSource.cs" />
-    <Compile Include="Wpf\Controls\GridCheckboxes.cs" />
-    <Compile Include="Wpf\Models\ReportCommand.cs" />
-    <Compile Include="Wpf\Entity\ToolLine.cs" />
-    <Compile Include="Wpf\Browser\WebWpfHelper.cs" />
-    <Compile Include="Wpf\Platform\WindowTitle.cs" />
-    <Compile Include="Wpf\Platform\WpfTitleHelper.cs" />
-    <Compile Include="Wpf\XbapLib\Xbap.cs" />
-    <Compile Include="XLinq\XEnumeratorElement.cs" />
-    <Compile Include="XLinq\XEnumeratorNodeNext.cs" />
-    <Compile Include="XLinq\XHtmlCompact.cs" />
-    <Compile Include="XLinq\XRaw.cs" />
-  </ItemGroup>
+   
   <ItemGroup>
     <None Include="app.config.md" />
   </ItemGroup>
@@ -162,10 +60,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Wpf\Platform\WindowTitle.xaml">
+    <Content Include="Wpf\Platform\WindowTitle.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
+    </Content>
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <!-- <Compile Remove="Wpf\Platform\WpfTitleHelper.cs" /> -->
+    <EmbeddedResource Include="Wpf\Platform\WpfTitleHelper.cs" />
+  </ItemGroup>
+
 </Project>

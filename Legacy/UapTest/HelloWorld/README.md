@@ -1,0 +1,40 @@
+### IOT Windows
+
+project.json
+```
+{
+  "dependencies": {
+    "microsoft.csharp": "4.0.0",
+    "Microsoft.NETCore.UniversalWindowsPlatform": "5.0.0"
+  },
+  "frameworks": {
+    "uap10.0": {}
+  },
+  "runtimes": {
+    "win10-arm": {},
+	"win10-arm-aot": {},
+	"win10-x64": {},
+    "win10-x64-aot": {}
+  }
+}
+```
+
+### Other runtimes
+
+,
+    "win10-arm-aot": {},
+    "win10-x86": {},
+    "win10-x86-aot": {},
+    "win10-x64": {},
+    "win10-x64-aot": {}
+
+
+
+ "System.AppContext": "4.0.0",
+        "System.ComponentModel.Annotations": "4.0.10",
+        "System.Data.Common": "4.0.0",
+        "System.IO.Compression.ZipFile": "4.0.0",
+        "System.IO.FileSystem": "4.0.0",
+        "System.Linq": "4.0.0",
+        "System.Runtime.WindowsRuntime": "4.0.10",
+        "System.Runtime.WindowsRuntime.UI.Xaml": "4.0.0"

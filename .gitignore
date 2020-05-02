@@ -9,3 +9,5 @@ websrc/
 *.csproj.user
 *.opensdf
 *.sdf
+.vs/
+push.ps1

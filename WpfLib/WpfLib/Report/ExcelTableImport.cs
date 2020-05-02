@@ -1,6 +1,8 @@
 ﻿using Ai.Report;
 using Ai.Report.Excel;
+#if NPOI
 using Ai.Report.NPoi;
+#endif
 using System;
 using System.Collections.Generic;
 using System.IO;

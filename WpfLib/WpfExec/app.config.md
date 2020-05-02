@@ -2,7 +2,7 @@
 <configuration>
   <connectionStrings>
     <clear />
-    <add name="Default" connectionString="Data Source=.\SQLEXPRESS;Persist Security Info=True;Integrated Security=true;"
+    <add name="Default" connectionString="Server=(local);Persist Security Info=True;Integrated Security=true;"
          providerName="System.Data.SqlClient" />
   </connectionStrings>
   <appSettings>

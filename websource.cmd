@@ -1,4 +1,3 @@
-\Tools\Html\HtmlGenerator.exe Ai.WpfLib.sln /out:websrc2
-\Tools\Html\HtmlGenerator.exe Ai.WebLib.sln /out:websrc
+\bin\Html\HtmlGenerator.exe Ai.Lib.sln /out:websrc2
 
 @PAUSE

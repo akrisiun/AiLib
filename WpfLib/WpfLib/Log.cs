@@ -3,6 +3,10 @@ using System.Configuration;
 using System.Diagnostics;
 using System.IO;
 
+namespace Ai.Wpf
+{
+}
+
 namespace Ai
 {
     public static class Log

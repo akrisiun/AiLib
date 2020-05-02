@@ -42,9 +42,11 @@ namespace WpfExec.Entity
 
         public static void Init(this ExecWindow window)
         {
+#if MSHTML
             WebWpfHelper.Prepare(window.result.web1);
             window.result.webCS.Prepare();
             window.result.webTSql.Prepare();
+#endif
 
             window.textCmd.GotFocus += (s, e) =>
             {

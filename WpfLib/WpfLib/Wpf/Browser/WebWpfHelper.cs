@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Windows.Controls;
-using mshtml;
+// using mshtml;
 using System.Windows.Navigation;   // using MsHtml = mshtml;
 
 // VisualFoxpro
@@ -21,11 +18,19 @@ namespace Ai.Wpf
             browser.Navigating += browser_Navigating;
         }
 
+        void browser_LoadCompleted(object sender, System.Windows.Navigation.NavigationEventArgs e)
+        {
+        }
+
         void browser_Navigating(object sender, System.Windows.Navigation.NavigatingCancelEventArgs e)
         {
            // throw new NotImplementedException();
         }
 
+#if !MSHTML
+        void browser_Navigated(object sender, System.Windows.Navigation.NavigationEventArgs e) { }
+
+#else
         void browser_Navigated(object sender, System.Windows.Navigation.NavigationEventArgs e)
         {
             var browser = sender as WebBrowser;
@@ -35,12 +40,6 @@ namespace Ai.Wpf
             var body = doc.documentElement.outerHTML;
             //SetReady(browser, doc, )
         }
-
-        void browser_LoadCompleted(object sender, System.Windows.Navigation.NavigationEventArgs e)
-        {
-            
-        }
-
 
         public void SetReady(WebBrowser browser, mshtml.HTMLDocument doc, Action<IHTMLEventObj> onReady)
         { 
@@ -55,7 +54,6 @@ namespace Ai.Wpf
             var handler = WebWpfHelper.Bind(browser, onReady, "onreadystatechange");
         }
     }
-
 
     //[ComSourceInterfaces("mshtml.HTMLTextContainerEvents")]
     //[Guid("3050F24A-98B5-11CF-BB82-00AA00BDCE0B")]
@@ -200,6 +198,9 @@ namespace Ai.Wpf
         //      }
         //    }
         //  }
+
+#endif
+
     }
 
 }
